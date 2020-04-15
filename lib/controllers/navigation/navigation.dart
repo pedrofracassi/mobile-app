@@ -26,14 +26,15 @@ class _DestinationViewState extends State<DestinationView> {
 
   @override
   Widget build(BuildContext context) {
-//    switch (widget.destination.id) {
-//      case 'feed':
-//        return HomePage(widget.destination, widget.user);
-//      case 'account':
-//        return AccountPage(widget.destination, widget.user);
-//      default:
-//        return Text('404');
-//    }
+    // TODO: fix this: not saving states
+    switch (widget.destination.id) {
+      case 'feed':
+        return HomePage(widget.user);
+      case 'account':
+        return AccountPage(widget.user);
+      default:
+        return Text('404');
+    }
 
     return Navigator(
       onGenerateRoute: (RouteSettings settings) {

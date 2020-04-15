@@ -18,7 +18,7 @@ class _LoggedInRouteState extends State<LoggedInRoute> {
   int _pageIndex = 0;
   List<Widget> _pages = <Widget>[
     // TODO: fix this
-    HomePage(user)
+    HomePage(widget.user)
   ];
 
   @override
