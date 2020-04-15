@@ -7,6 +7,10 @@ import 'package:musicorum_app/constants.dart';
 import 'package:musicorum_app/styles/colors.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({Key key, this.onLogin}): super(key: key);
+
+  final Function onLogin;
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -17,8 +21,11 @@ class _LoginPageState extends State<LoginPage> {
         url: API_URL + '/login?callback=musicorum://authCallback', callbackUrlScheme: 'musicorum');
 
     print(result);
-    final token =  Uri.parse(result).queryParameters['token']
-    final storage = FlutterSecureStorage();
+    final token =  Uri.parse(result).queryParameters['token'];
+    final storage = new FlutterSecureStorage();
+    print('Token: ' + token);
+    await storage.write(key: SECURE_STORAGE_TOKEN, value: token);
+    widget.onLogin();
   }
 
   @override

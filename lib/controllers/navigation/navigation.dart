@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:musicorum_app/api/structures/user.dart';
 import 'package:musicorum_app/controllers/navigation/destination.dart';
+import 'package:musicorum_app/routes/pages/account.dart';
+import 'package:musicorum_app/routes/pages/home.dart';
 
 class DestinationView extends StatefulWidget {
-  const DestinationView({ Key key, this.destination }): super(key: key);
+  const DestinationView({ Key key, this.destination, this.user }): super(key: key);
   final Destination destination;
+  final User user;
 
   @override
   _DestinationViewState createState() => _DestinationViewState();
@@ -22,12 +26,31 @@ class _DestinationViewState extends State<DestinationView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(32.0),
-        alignment: Alignment.center,
-        child: Text('bom dia'),
-      ),
+//    switch (widget.destination.id) {
+//      case 'feed':
+//        return HomePage(widget.destination, widget.user);
+//      case 'account':
+//        return AccountPage(widget.destination, widget.user);
+//      default:
+//        return Text('404');
+//    }
+
+    return Navigator(
+      onGenerateRoute: (RouteSettings settings) {
+        return MaterialPageRoute(
+          settings: settings,
+          builder: (BuildContext context) {
+            switch (settings.name) {
+              case '/':
+                return HomePage(widget.destination, widget.user);
+              case '/account':
+                return AccountPage(widget.destination, widget.user);
+              default:
+                return Text('404');
+            }
+          }
+        );
+      },
     );
   }
 
@@ -36,4 +59,12 @@ class _DestinationViewState extends State<DestinationView> {
     textController.dispose();
     super.dispose();
   }
+}
+
+class DestinationsController extends StatefulWidget {
+  const DestinationsController({ Key key, this.user }): super(key: key);
+  final User user;
+
+  @override
+  _DestinationViewState createState() => _DestinationViewState();
 }

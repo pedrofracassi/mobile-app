@@ -2,6 +2,10 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:musicorum_app/api/musicorum.dart';
+import 'package:musicorum_app/api/structures/user.dart';
+import 'package:musicorum_app/constants.dart';
 import 'package:musicorum_app/controllers/auth_page_switch.dart';
 import 'package:musicorum_app/routes/logging_in.dart';
 import 'package:musicorum_app/styles/colors.dart';
@@ -35,26 +39,47 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   bool loading = true;
   bool authenticated = false;
+  User user = null;
 
   @override
   void initState() {
     log('Carregando');
-    authDevice().then((_) {
-      setState(() {
-        loading = false;
-      });
-    });
+    authDevice();
     super.initState();
   }
 
   Future authDevice() async {
-    await Future.delayed(Duration(seconds: 3));
+    final storage = new FlutterSecureStorage();
+    String token = await storage.read(key: SECURE_STORAGE_TOKEN);
+    if (token == null) {
+      setState(() {
+        loading = false;
+        authenticated = false;
+      });
+      return;
+    }
+    MusicorumApi musicorumApi = MusicorumApi();
+    User resUser = await musicorumApi.getCurrentAccount(token);
+    if (resUser != null) {
+      print('${resUser.name} logged in.');
+      setState(() {
+        loading = false;
+        authenticated = true;
+        user = resUser;
+      });
+    } else {
+      setState(() {
+        loading = false;
+        authenticated = true;
+      });
+    }
+
   }
 
   @override
   Widget build(BuildContext context) {
     log(loading.toString());
-    return loading ? LoggingIn() : PageSwitch(authenticated: authenticated);
+    return loading ? LoggingIn() : PageSwitch(authenticated: authenticated, onLogin: authDevice, user: user,);
   }
 }
 
