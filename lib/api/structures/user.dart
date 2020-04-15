@@ -1,3 +1,6 @@
+import 'package:musicorum_app/api/structures/artist.dart';
+import 'file:///D:/Projects/Musicorum/musicorumapp-flutter/musicorum_app/lib/api/lastfm.dart';
+import 'package:musicorum_app/api/structures/types.dart';
 import 'package:musicorum_app/constants.dart';
 
 class User {
@@ -20,6 +23,11 @@ class User {
     String url = DEFAULT_AVATAR_IMAGE;
     if (this.imageURL != null || this.imageURL != "") url = this.imageURL;
     return url.replaceAll('300', size.toString());
+  }
+
+  Future<List<ChartArtist>> getTopArtists (Period period) async {
+    final LastfmApi lastfmApi = LastfmApi();
+    return await lastfmApi.getTopArtists(username, period);
   }
 
   factory User.fromJSON(Map<String, dynamic> json) {

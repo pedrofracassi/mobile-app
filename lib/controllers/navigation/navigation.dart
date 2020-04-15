@@ -33,9 +33,9 @@ class _DestinationViewState extends State<DestinationView> {
       case 'account':
         return AccountPage(widget.user);
       default:
-        return Text('404');
+        return Text('404 - aaaaaaaaaa');
     }
-
+/*
     return Navigator(
       onGenerateRoute: (RouteSettings settings) {
         return MaterialPageRoute(
@@ -52,7 +52,7 @@ class _DestinationViewState extends State<DestinationView> {
           }
         );
       },
-    );
+    );*/
   }
 
   @override
