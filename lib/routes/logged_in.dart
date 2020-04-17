@@ -25,7 +25,6 @@ class _LoggedInRouteState extends State<LoggedInRoute> {
       _pages = <Widget>[
         new HomePage(widget.user),
         new HomePage(widget.user),
-        new HomePage(widget.user),
         new AccountPage(widget.user),
         new AccountPage(widget.user)
       ];

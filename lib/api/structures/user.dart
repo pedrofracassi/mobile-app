@@ -1,4 +1,5 @@
 import 'package:musicorum_app/api/structures/artist.dart';
+import 'package:musicorum_app/api/structures/track.dart';
 import 'file:///D:/Projects/Musicorum/musicorumapp-flutter/musicorum_app/lib/api/lastfm.dart';
 import 'package:musicorum_app/api/structures/types.dart';
 import 'package:musicorum_app/constants.dart';
@@ -23,6 +24,11 @@ class User {
     String url = DEFAULT_AVATAR_IMAGE;
     if (this.imageURL != null || this.imageURL != "") url = this.imageURL;
     return url.replaceAll('300', size.toString());
+  }
+
+  Future<List<ScrobbleTrack>> getRecentTracks ({int limit = 10}) async {
+    final LastfmApi lastfmApi = LastfmApi();
+    return await lastfmApi.getRecentTracks(username, limit: limit);
   }
 
   Future<List<ChartArtist>> getTopArtists (Period period) async {

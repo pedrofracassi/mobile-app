@@ -10,7 +10,6 @@ class Destination {
 }
 
 const List<Destination> destinations = <Destination>[
-  Destination('Feed', 'feed', Icons.home),
   Destination('Discover', 'discover', Icons.search),
   Destination('Charts', 'charts', Icons.show_chart),
   Destination('Scrobbling', 'scrobbling', Icons.queue_music),

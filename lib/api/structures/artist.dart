@@ -7,9 +7,10 @@ class ArtistBase {
   final String url;
   final int playCount;
 
-  Future<String> getImageUrl() {
+  Future<String> getImageUrl(int size) async {
     DeezerApi deezerApi = DeezerApi();
-    return deezerApi.getArtistImage(name);
+    final String url = await deezerApi.getArtistImage(name);
+    return url.replaceAll('250x250-000', '${size}x$size-000');
   }
 }
 
