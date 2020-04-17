@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicorum_app/api/structures/user.dart';
-import 'package:musicorum_app/controllers/navigation/destination.dart';
+import 'package:musicorum_app/controllers/navigation/destinations.dart';
 
 class HomePage extends StatelessWidget {
   HomePage(this.user);

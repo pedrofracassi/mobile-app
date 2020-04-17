@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:musicorum_app/api/structures/user.dart';
-import 'package:musicorum_app/controllers/navigation/destination.dart';
+import 'package:musicorum_app/controllers/navigation/destinations.dart';
 import 'package:musicorum_app/controllers/navigation/navigation.dart';
 import 'package:musicorum_app/routes/pages/account.dart';
 import 'package:musicorum_app/routes/pages/home.dart';
@@ -17,16 +17,23 @@ class LoggedInRoute extends StatefulWidget {
 
 class _LoggedInRouteState extends State<LoggedInRoute> {
   int _pageIndex = 0;
-  List<Widget> _pages;
+  List<Widget> pages;
+
+  HomePage homePage;
+  AccountPage accountPage;
+
+  final PageController pageController = PageController();
+
+  final PageStorageBucket bucket = PageStorageBucket();
 
   @override
   void initState() {
     setState(() {
-      _pages = <Widget>[
-        new HomePage(widget.user),
-        new HomePage(widget.user),
-        new AccountPage(widget.user),
-        new AccountPage(widget.user)
+      pages = [
+        HomePage(widget.user),
+        AccountPage(widget.user),
+        HomePage(widget.user),
+        AccountPage(widget.user)
       ];
     });
     super.initState();
@@ -35,19 +42,24 @@ class _LoggedInRouteState extends State<LoggedInRoute> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(systemNavigationBarColor: Colors.black87));
+        SystemUiOverlayStyle(systemNavigationBarColor: bottomNavColor));
 
     return Scaffold(
-      body: SafeArea(
-          top: false,
-          child: _pages[_pageIndex]),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: bottomNavColor,
-        currentIndex: _pageIndex,
-        onTap: (int index) => {
+      body: PageView(
+        children: pages,
+        controller: pageController,
+        onPageChanged: (index) {
           setState(() {
             _pageIndex = index;
-          })
+          });
+        },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: bottomNavColor,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _pageIndex,
+        onTap: (int index) => {
+          pageController.jumpToPage(index)
         },
         items: destinations
             .map((Destination destination) => BottomNavigationBarItem(

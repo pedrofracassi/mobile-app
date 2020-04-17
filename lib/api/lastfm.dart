@@ -39,7 +39,7 @@ class LastfmApi {
     }
   }
 
-  Future<List<ScrobbleTrack>> getRecentTracks(String user, {int limit = 10}) async {
+  Future<List<ScrobbleTrack>> getRecentTracks(String user, int limit) async {
     final Map<String, String> parameters = new Map();
     parameters['user'] = user;
     parameters['limit'] = limit.toString();

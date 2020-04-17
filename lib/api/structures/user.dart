@@ -26,9 +26,10 @@ class User {
     return url.replaceAll('300', size.toString());
   }
 
-  Future<List<ScrobbleTrack>> getRecentTracks ({int limit = 10}) async {
+  Future<List<ScrobbleTrack>> getRecentTracks ({limit}) async {
+    if (limit == null) limit = 10;
     final LastfmApi lastfmApi = LastfmApi();
-    return await lastfmApi.getRecentTracks(username, limit: limit);
+    return await lastfmApi.getRecentTracks(username, limit);
   }
 
   Future<List<ChartArtist>> getTopArtists (Period period) async {
