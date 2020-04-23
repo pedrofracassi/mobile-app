@@ -59,6 +59,11 @@ class TrackPageState extends State<TrackPage> {
             onPressed: () {return;},
           )
         ],
+        bottom: artistImage == null ? LinearProgressIndicator(
+          backgroundColor: whiteLoadingBackground,
+          valueColor:
+          AlwaysStoppedAnimation(Colors.white60),
+        ) : Container(),
       ),
       extendBodyBehindAppBar: true,
       body: Container(
@@ -92,11 +97,7 @@ class TrackPageState extends State<TrackPage> {
                           ),
                           artistImage != null
                               ? TrackInfo(track, artist, widget.track.getImage(300))
-                              : LinearProgressIndicator(
-                                  backgroundColor: whiteLoadingBackground,
-                                  valueColor:
-                                      AlwaysStoppedAnimation(Colors.white60),
-                                )
+                              : Container()
                         ],
                       ),
                       decoration: BoxDecoration(
