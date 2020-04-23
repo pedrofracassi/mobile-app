@@ -56,7 +56,7 @@ class TrackPageState extends State<TrackPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.share),
-            onPressed: () {return;},
+            onPressed: () {print('a');},
           )
         ],
         bottom: artistImage == null ? LinearProgressIndicator(
