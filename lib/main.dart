@@ -4,11 +4,14 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:musicorum_app/api/musicorum.dart';
-import 'package:musicorum_app/api/structures/user.dart';
+import 'package:musicorum_app/api/structures/user.dart' as UserObj;
 import 'package:musicorum_app/constants.dart';
 import 'package:musicorum_app/controllers/auth_page_switch.dart';
 import 'package:musicorum_app/routes/logging_in.dart';
 import 'package:musicorum_app/styles/colors.dart';
+import 'package:sentry/io_client.dart';
+
+final SentryClient sentry = new SentryClient(dsn: SENTRY_DSN);
 
 void main() {
   runApp(MusicorumApp());
@@ -18,16 +21,23 @@ class MusicorumApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        accentColor: primaryColor,
-        scaffoldBackgroundColor: Colors.black,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: RootPage(),
-    );
+    try {
+      return MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          accentColor: primaryColor,
+          scaffoldBackgroundColor: Colors.black,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: RootPage(),
+      );
+    } catch (error, stackTrace) {
+      sentry.captureException(
+        exception: error,
+        stackTrace: stackTrace,
+      );
+    }
   }
 }
 
@@ -39,7 +49,8 @@ class RootPage extends StatefulWidget {
 class _RootPageState extends State<RootPage> {
   bool loading = true;
   bool authenticated = false;
-  User user = null;
+  String error;
+  UserObj.User user;
 
   @override
   void initState() {
@@ -58,19 +69,25 @@ class _RootPageState extends State<RootPage> {
       });
       return;
     }
-    MusicorumApi musicorumApi = MusicorumApi();
-    User resUser = await musicorumApi.getCurrentAccount(token);
-    if (resUser != null) {
-      print('${resUser.name} logged in.');
+    try {
+      MusicorumApi musicorumApi = MusicorumApi();
+      UserObj.User resUser = await musicorumApi.getCurrentAccount(token);
+      if (resUser != null) {
+        print('${resUser.name} logged in.');
+        setState(() {
+          loading = false;
+          authenticated = true;
+          user = resUser;
+        });
+      } else {
+        setState(() {
+          loading = false;
+          authenticated = true;
+        });
+      }
+    } catch (e) {
       setState(() {
-        loading = false;
-        authenticated = true;
-        user = resUser;
-      });
-    } else {
-      setState(() {
-        loading = false;
-        authenticated = true;
+        error = e.toString();
       });
     }
 
@@ -78,6 +95,14 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (error != null) {
+      showDialog(context: context, builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('aa'),
+          content: Text(error),
+        );
+      });
+    }
     log(loading.toString());
     return loading ? LoggingIn() : PageSwitch(authenticated: authenticated, onLogin: authDevice, user: user,);
   }

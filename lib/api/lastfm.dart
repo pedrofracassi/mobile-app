@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:musicorum_app/api/structures/artist.dart';
 import 'package:musicorum_app/api/structures/track.dart';
 import 'package:musicorum_app/api/structures/types.dart';
+import 'package:musicorum_app/api/structures/artist.dart';
 import 'package:musicorum_app/constants.dart';
 
 class LastfmApi {
@@ -49,12 +50,54 @@ class LastfmApi {
 
     if (response.statusCode == 200 && response.body != null) {
       final json = jsonDecode(response.body);
+      print('tracks');
+      print(response.body);
       final List<dynamic> trackList = json['recenttracks']['track'];
       List<ScrobbleTrack> tracks = [];
       for (int i = 0; i < trackList.length; i++) {
         tracks.add(ScrobbleTrack.fromJSON(trackList[i]));
       }
       return tracks;
+    } else {
+      int code = response.statusCode;
+      print('Error on API: Error code $code');
+      throw Error();
+    }
+  }
+
+  // TODO: lang
+  Future<InfoArtist> getArtist(String name, String user) async {
+    final Map<String, String> parameters = new Map();
+    parameters['username'] = user;
+    parameters['artist'] = name;
+
+    final Response response = await request('artist.getInfo', parameters);
+
+    if (response.statusCode == 200 && response.body != null) {
+      final json = jsonDecode(response.body);
+      print('artist');
+      print(response.body);
+      return InfoArtist.fromJSON(json['artist']);
+    } else {
+      int code = response.statusCode;
+      print('Error on API: Error code $code');
+      throw Error();
+    }
+  }
+
+  Future<InfoTrack> getTrack(String name, String artist, String user) async {
+    final Map<String, String> parameters = new Map();
+    parameters['track'] = name;
+    parameters['username'] = user;
+    parameters['artist'] = artist;
+
+    final Response response = await request('track.getInfo', parameters);
+
+    if (response.statusCode == 200 && response.body != null) {
+      final json = jsonDecode(response.body);
+      print('artist');
+      print(response.body);
+      return InfoTrack.fromJSON(json['track']);
     } else {
       int code = response.statusCode;
       print('Error on API: Error code $code');

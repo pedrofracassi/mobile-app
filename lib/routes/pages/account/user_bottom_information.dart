@@ -13,25 +13,26 @@ class UserBottomInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SizedBox(
-          height: 50,
-        ),
+//        SizedBox(
+//          height: 50,
+//        ),
         Container(
           alignment: Alignment.topLeft,
+          padding: EdgeInsets.only(left: 8, right: 8),
           child: Column(
             children: <Widget>[
-              Container(
-                child: Text(
-                  'Last Scrobbles',
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                ),
-                alignment: Alignment.centerLeft,
-              ),
-              SizedBox(
-                height: 14,
-              ),
+//              Container(
+//                child: Text(
+//                  'Last Scrobbles',
+//                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+//                ),
+//                alignment: Alignment.centerLeft,
+//              ),
+//              SizedBox(
+//                height: 14,
+//              ),
               ...recentTracks
-                  .map((ScrobbleTrack t) => ScrobbleWidget(t))
+                  .map((ScrobbleTrack t) => ScrobbleWidget(t, user))
                   .toList()
             ],
           ),
