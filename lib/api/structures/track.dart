@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:musicorum_app/api/deezer.dart';
 import 'package:musicorum_app/api/lastfm.dart';
 import 'package:musicorum_app/api/structures/artist.dart';
 import 'package:musicorum_app/api/structures/tag.dart';
