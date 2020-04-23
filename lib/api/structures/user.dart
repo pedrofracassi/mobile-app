@@ -1,6 +1,6 @@
 import 'package:musicorum_app/api/structures/artist.dart';
 import 'package:musicorum_app/api/structures/track.dart';
-import 'file:///D:/Projects/Musicorum/musicorumapp-flutter/musicorum_app/lib/api/lastfm.dart';
+import 'package:musicorum_app/api/lastfm.dart';
 import 'package:musicorum_app/api/structures/types.dart';
 import 'package:musicorum_app/constants.dart';
 
