@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Flutter CLI
       uses: steebchen/flutter@v1.0.0
+    - name: Install Dependencies
+      run: flutter pub get
     - name: Build
       run: flutter build apk --debug --split-per-abi
     - name: Release
