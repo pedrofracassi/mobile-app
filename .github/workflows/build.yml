@@ -1,5 +1,10 @@
-on: push
-name: Build and Release apk
+on: 
+  push:
+    tags:
+    - '*'
+
+name: Release
+
 jobs:
   build:
     name: Build APK
@@ -11,4 +16,4 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "build/app/outputs/apk/debug/*.apk"
-        token: ${{ secrets.TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
